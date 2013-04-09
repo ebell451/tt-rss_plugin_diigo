@@ -15,7 +15,7 @@
 			onComplete: function(transport) {
 				var ti = JSON.parse(transport.responseText);
 
-				var share_url = "http://www.diigo.com/post?url" + param_escape(ti.link) + "&title==" + param_escape(ti.title);
+				var share_url = "http://www.diigo.com/post?url=" + param_escape(ti.link) + "&title=" + param_escape(ti.title);
 
 				w.location.href = share_url;
 
