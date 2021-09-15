@@ -3,6 +3,7 @@ function shareArticleTodiigo(id) {
 
 	var d = new Date();
 	var ts = d.getTime();
+        Notify.progress("Opening Diigo window");
 
 	try {
 		xhrPost("backend.php",
@@ -15,7 +16,7 @@ function shareArticleTodiigo(id) {
 			(reply) => {
 				if (reply) {
 					if (reply.status == "200") {
-						Notify.progress("Ouverture de la fenetre Diigo");
+						Notify.info("Diigo windows openned");
 
 						var ti = JSON.parse(reply.responseText);
 
