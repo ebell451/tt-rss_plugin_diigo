@@ -22,7 +22,7 @@ class diigo extends Plugin {
 	function hook_article_button($line) {
 		$article_id = $line["id"];
 
-		$rv = "<img src=\"plugins/diigo/diigo.png\"
+		$rv = "<img src=\"plugins.local/diigo/diigo.png\"
 			class='tagsPic' style=\"cursor : pointer\"
 			onclick=\"shareArticleTodiigo($article_id)\"
 			title='".__('Share on diigo.')."'>";
