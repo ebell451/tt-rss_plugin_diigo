@@ -1,28 +1,37 @@
-	function shareArticleTodiigo(id) {
+function shareArticleTodiigo(id) {
+
+
+	var d = new Date();
+	var ts = d.getTime();
+
 	try {
-		var query = "?op=pluginhandler&plugin=diigo&method=getInfo&id=" + param_escape(id);
+		xhrPost("backend.php",
+			{
+				'op': 'pluginhandler',
+				'plugin': 'diigo',
+				'method': 'getInfo',
+				'id': encodeURIComponent(id)
+			},
+			(reply) => {
+				if (reply) {
+					if (reply.status == "200") {
+						Notify.progress("Ouverture de la fenetre Diigo");
 
-		console.log(query);
+						var ti = JSON.parse(reply.responseText);
 
-		var d = new Date();
-      var ts = d.getTime();
+						var share_url = "http://www.diigo.com/post?url=" + encodeURIComponent(ti.link) + "&title=" + encodeURIComponent(ti.title);
 
-		var w = window.open('backend.php?op=backend&method=loading', 'ttrss_diigo',
-			"status=0,toolbar=0,location=0,width=500,height=450,scrollbars=1,menubar=0");
-
-		new Ajax.Request("backend.php",	{
-			parameters: query,
-			onComplete: function(transport) {
-				var ti = JSON.parse(transport.responseText);
-
-				var share_url = "http://www.diigo.com/post?url=" + param_escape(ti.link) + "&title=" + param_escape(ti.title);
-
-				w.location.href = share_url;
-
-			} });
-
+						window.open(share_url, 'ttrss_diigo',
+							"status=0,toolbar=0,location=0,width=1000,height=950,scrollbars=1,menubar=0");
+					} else {
+						Notify.error("<strong>Error: " + reply.status + " encountered while sharing to DIIGO!</strong>", true);
+					}
+				} else {
+					Notify.error("The Diigo plugin needs to be configured. See the README for help", true);
+				}
+			},);
 
 	} catch (e) {
-		exception_error("diigoArticle", e);
+		App.Error.report(e);	
 	}
-	}
+}
